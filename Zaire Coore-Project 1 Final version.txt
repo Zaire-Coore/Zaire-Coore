@@ -1,0 +1,86 @@
+#include <iostream>
+#include <cstdlib>
+#include <iomanip>
+using namespace std;
+/*
+Zaire Coore
+9/13/2023
+*/
+// global var
+const double sr_discount = 0.30;
+const double twelve_or_More_discount = 0.15;
+const double sixOrMore_discount = 0.20;
+
+// Function prototypes(creating the funtions before the main so the compiler does not freak out)
+void display_info();
+void obtain_cost(double& monthly_Cost, double& session_Cost);
+void getInfo(double& regMemPricePerMth, double& personalTrSesCost, char& senCitizen, int& nOfMonths, int& nOfPersonalTrSess);
+double computeCost(double regMemPricePerMth, double personalTrSesCost, char senCitizen, int nOfMonths, int nOfPersonalTrSess);
+
+int main() {
+    double monthly_Cost = 0;
+    double session_Cost = 0;
+    char senCitizen;//(should I set this to something?)
+    int nOfMonths, nOfPersonalTrSess;
+
+    cout << fixed << showpoint << setprecision(2);
+    display_info();
+    obtain_cost(monthly_Cost, session_Cost);
+    getInfo(monthly_Cost, session_Cost, senCitizen, nOfMonths, nOfPersonalTrSess);
+
+    double totalCost = computeCost(monthly_Cost, session_Cost, senCitizen, nOfMonths, nOfPersonalTrSess);
+    cout << "The total cost of your membership cost = $" << totalCost << endl;
+
+    return 0;
+}
+
+void display_info() {
+    cout << endl << "Welcome to Stay Healthy and Fit center." << endl;
+    cout << "This program determines the cost of a new membership." << endl;
+    cout << "If you are a senior citizen, then the discount is 30% of the regular membership price." << endl;
+    cout << "If you buy membership for twelve months and pay today, the discount is 15%." << endl;
+    cout << "If you buy and pay for 6 or more personal training sessions today, the discount on each session is 20%." << endl;
+}
+
+void obtain_cost(double& monthly_Cost, double& session_Cost) {
+    cout << endl << "Enter the cost of a regular membership per month: ";
+    cin >> monthly_Cost;
+    cout << "Enter the cost of one personal training session: ";
+    cin >> session_Cost;
+}
+
+void getInfo(double& regMemPricePerMth, double& personalTrSesCost, char& senCitizen, int& nOfMonths, int& nOfPersonalTrSess) {
+    
+     cout << "Are you a senior citizen (Y,y/N,n): ";
+    cin >> senCitizen;
+
+    cout << "Enter the number of personal training sessions bought: ";
+    cin >> nOfPersonalTrSess;
+   
+    cout << "Enter the number of months you are paying for: ";
+    cin >> nOfMonths;
+}
+// Adding all of the variabls together 
+double computeCost(double regMemPricePerMth, double personalTrSesCost, char senCitizen, int nOfMonths, int nOfPersonalTrSess) {
+    double totalCost = 0;
+
+    // Apply senior citizen discount
+    if (senCitizen == 'y' || senCitizen == 'Y')
+        totalCost = regMemPricePerMth * nOfMonths * (1 - sr_discount);
+    else
+        totalCost = regMemPricePerMth * nOfMonths;
+
+    // 12 or more month discount 
+    if (nOfMonths >= 12)
+        totalCost *= (1 - twelve_or_More_discount);
+
+    // 6 month discount
+    if (nOfPersonalTrSess >= 6)
+        totalCost += personalTrSesCost * nOfPersonalTrSess * (1 - sixOrMore_discount);
+    else
+        totalCost += personalTrSesCost * nOfPersonalTrSess;
+
+    return totalCost;
+}
+
+
